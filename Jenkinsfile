@@ -62,7 +62,7 @@ pipeline {
          stage('Build'){
          steps {
             sh 'npm run build'
-            sh 'ls -la > server.mjs'
+            sh 'ls -la > server.mjs dist'
             archiveArtifacts(artifacts 'server.mjs', fingerprint: true)
               }
 
