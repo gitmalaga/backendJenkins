@@ -5,7 +5,7 @@ pipeline {
 
         disableConcurrentBuilds()
         timestamps()
-        timout(time : 5)
+        timeout(time : 5)
     }
 
     environment {
