@@ -40,14 +40,11 @@ pipeline {
               }
 
             }
-
-
-
     }
 
     post{
         always{
-            clearWS()
+            cleanWS()
         }
 
         success{
