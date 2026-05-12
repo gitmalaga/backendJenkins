@@ -47,7 +47,7 @@ pipeline {
 
         stage('Type check'){
          steps {
-            sh 'npm type-check'
+            sh 'npm run type-check'
               }
 
             }
