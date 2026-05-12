@@ -1,42 +1,69 @@
 pipeline {
     agent any //para que se ejecute en el nodo principal
 
-    stages { 
-        stage('Etapa inicial') {
-        steps {
+    options{
 
-            sh 'ls -alh' //para ver dntro de jnkins los fichros a los qu tengo acceso
+        disableConcurrentBuilds()
+        timestamps()
+        time : 5
+    }
+
+    environment {
+
+        FORCE_COLOR = 0
+        NO_COLOR = true
+    }
+
+
+    stages { 
+        stage('Audit tools') {
+        steps {
             sh 'node --version'
-            sh 'npm --version'
+           
               }
 
              }
 
-        stage('Etapa instalación dependencias'){
+        stage('Install dependencies'){
         steps {
             sh 'npm install'
               }
 
              }
 
-        stage('Etapa Check buenas prácticas'){
+        stage('Format check'){
         steps {
             sh 'npm run format:check'
               }
         
              }
 
-         stage('Etapa cheque ficheros'){
+         stage('Code quality'){
          steps {
             sh 'npm run lint'
               }
 
             }
 
+        stage('Type check'){
+         steps {
+            sh 'npm type-check'
+              }
 
-         stage('Etapa hacer tests'){
+            }
+
+         stage('Tests'){
          steps {
             sh 'npm run test'
+              }
+
+            }
+
+         stage('Build'){
+         steps {
+            sh 'npm run build'
+            sh 'ls -la >server.mjs'
+            archiveArtifacts(artifacts 'server.mjs', fingerprint: true)
               }
 
             }
@@ -48,15 +75,11 @@ pipeline {
         }
 
         success{
-            echo 'Pipeline ejecutada con éxito'
-        }
-
-        unstable{
-            echo 'Pipeline ejecutada con errores'
+            echo 'Pipeline completed successfully!'
         }
 
         failure{
-            echo 'Pipeline fallida. Revisa los logs'
+            echo 'Pipeline failed. Review logs.'
 
         }
     }
